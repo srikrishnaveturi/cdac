@@ -19,14 +19,15 @@ Detect trash on the road, and clean it
 
 
 ### Hardware usage
-1. Arduino nano
-2. R-pi 3
-3. Motor driver
-4. Colour sensor module
+1. Arduino nano (3.3v)
+2. R-pi 3 (3.3v)
+3. Motor driver (5v)
+4. Colour sensor module (5v)
 5. Camera
-6. 4 motors - 4 wheels
+6. 4 motors - 4 wheels (9v)
 7. Chasis
 8. Rechargable 9V batteries
+9. 9V-5V step down tranformer module (9v)
 
 ## Current TODO
 
