@@ -32,3 +32,4 @@ Detect trash on the road, and clean it
 ## Current TODO
 
 Mounting and Testing
+ boss.py final python file for basic line following using opencv, imperfect
