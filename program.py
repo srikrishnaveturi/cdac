@@ -40,8 +40,7 @@ def image_processing(frame):
         th2=cv2.Canny(closing,75,150)
 #         dilation2=cv2.dilate(th2,kernel,iterations=5)
         return th2
-
-        def segmentation(image,seg):
+def segmentation(image,seg):
     frm = region_of_interest(image,seg)
     f_pix = np.argwhere(frm == 255)
     average = [sum(x)/len(x) for x in zip(*f_pix)]
@@ -63,7 +62,7 @@ def image_processing(frame):
     return f_cx
     
 
-    def contour_center(th2):
+def contour_center(th2):
     contours,hierarchy = cv2.findContours(th2,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE) 
 #     cv2.drawContours(th2,contours,-1,(0,255,0),3)
     if len(contours)<0:
