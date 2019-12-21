@@ -81,7 +81,7 @@ def contour_center(th2):
 
     #*****Main Program *******#
 
-cap = cv2.VideoCapture(0)
+cap = cv2.VideoCapture(1)
 cap.set(3,320.0) #set the size
 cap.set(4,240.0)  #set the size
 cap.set(5,15)  
@@ -103,6 +103,7 @@ while(True):
     img = cv2.line(img, (160,240), (direction_X,120), (255, 0, 0) , 3) 
     cv2.imshow('input',frame)
     cv2.imshow('output',img)
+    print(direction_X)
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
 
