@@ -1,6 +1,13 @@
 import numpy as np
 import cv2
 from statistics import mean
+import math
+
+font                   = cv2.FONT_HERSHEY_SIMPLEX
+bottomLeftCornerOfText = (160,50)
+fontScale              = 1
+fontColor              = (255,0,0)
+lineType               = 2
 
 #Constants
 #Segmentation On Lower Half of The Frame
@@ -10,6 +17,9 @@ seg3 = [np.array([[0,180],[0,210],[320,180],[320,210]],dtype=np.int32)]
 seg4 = [np.array([[0,210],[0,240],[320,210],[320,240]],dtype=np.int32)]
 vertices = [np.array([[0,240],[320,240],[160,0]],dtype=np.int32)]  
 
+def getAngle(a, b, c):
+    ang = math.degrees(math.atan2(c[1]-b[1], c[0]-b[0]) - math.atan2(a[1]-b[1], a[0]-b[0]))
+    return ang + 360 if ang < 0 else ang
 
 def region_of_interest(img, vertices):
     mask = np.zeros_like(img)
@@ -101,9 +111,30 @@ while(True):
     direction_X = int(round(mean([cx1,cx2,cx3,cx4])))
     
     img = cv2.line(img, (160,240), (direction_X,120), (255, 0, 0) , 3) 
+
+    direction_angle = int(round(getAngle((direction_X, 120), (160, 240), (160,120))))
+    if direction_angle > 180 :
+        direction_angle = str(360 -direction_angle)
+    else:
+        direction_angle=str(direction_angle)
+
+    direction_final="S"
+
+    if direction_X < 140:
+        direction_final = "L "+direction_angle
+    if direction_X > 180:
+        direction_final = "R "+ direction_angle
+    if direction_X>141 and direction_X<179:
+        direction_final = "S "+direction_angle
+    cv2.putText(img,direction_final, 
+    bottomLeftCornerOfText, 
+    font, 
+    fontScale,
+    fontColor,
+    lineType)
+
     cv2.imshow('input',frame)
     cv2.imshow('output',img)
-    print(direction_X)
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
 
