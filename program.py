@@ -91,7 +91,7 @@ def contour_center(th2):
 
     #*****Main Program *******#
 
-cap = cv2.VideoCapture(1)
+cap = cv2.VideoCapture(0)
 cap.set(3,320.0) #set the size
 cap.set(4,240.0)  #set the size
 cap.set(5,15)  
@@ -113,13 +113,9 @@ while(True):
     img = cv2.line(img, (160,240), (direction_X,120), (255, 0, 0) , 3) 
 
     direction_angle = int(round(getAngle((direction_X, 120), (160, 240), (160,120))))
-    if direction_angle > 180 :
-        direction_angle = str(360 -direction_angle)
-    else:
-        direction_angle=str(direction_angle)
-
+    
     direction_final="S"
-
+    direction_angle=str(direction_angle)
     if direction_X < 140:
         direction_final = "L "+direction_angle
     if direction_X > 180:
