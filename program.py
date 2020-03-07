@@ -1,7 +1,13 @@
 import numpy as np
+import threading
 import cv2
 from statistics import mean
 import math
+import serial 
+port="/dev/ttyACM0"
+rate=9600
+s1=serial.Serial(port,rate)
+s1.flushInput()
 
 font                   = cv2.FONT_HERSHEY_SIMPLEX
 bottomLeftCornerOfText = (160,50)
@@ -17,9 +23,14 @@ seg3 = [np.array([[0,180],[0,210],[320,180],[320,210]],dtype=np.int32)]
 seg4 = [np.array([[0,210],[0,240],[320,210],[320,240]],dtype=np.int32)]
 vertices = [np.array([[0,240],[320,240],[160,0]],dtype=np.int32)]  
 
+def communicate (a):
+    a=a+","
+    if s1.inWaiting()>0:
+        print(a)
+        s1.write(a.encode())
+
 def getAngle(a, b, c):
     ang = math.degrees(math.atan2(c[1]-b[1], c[0]-b[0]) - math.atan2(a[1]-b[1], a[0]-b[0]))
-    print(ang)
     return -(ang - 90) if ang < 0 else 90-ang
 
 def region_of_interest(img, vertices):
@@ -91,7 +102,7 @@ def contour_center(th2):
     
 
     #*****Main Program *******#
-
+    
 cap = cv2.VideoCapture(0)
 cap.set(3,320.0) #set the size
 cap.set(4,240.0)  #set the size
@@ -108,9 +119,8 @@ while(True):
     cx2 = segmentation(image=img,seg=seg2)
     cx3 = segmentation(image=img,seg=seg3)
     cx4 = segmentation(image=img,seg=seg4)
-    
+
     direction_X = int(round(mean([cx1,cx2,cx3,cx4])))
-    
     img = cv2.line(img, (160,240), (direction_X,120), (255, 0, 0) , 3) 
 
     direction_angle = int(round(getAngle((direction_X, 120), (160, 240), (160,120))))
@@ -119,16 +129,17 @@ while(True):
     if direction_X < 140:
         direction_final = "L "+direction_angle
     if direction_X > 180:
-        direction_final = "R "+ direction_angle
+       direction_final = "R "+ direction_angle
     if direction_X>141 and direction_X<179:
-        direction_final = "S "+direction_angle
+       direction_final = "S "+direction_angle
     cv2.putText(img,direction_final, 
     bottomLeftCornerOfText, 
     font, 
     fontScale,
     fontColor,
     lineType)
-
+    disr=str(direction_angle)
+    communicate(disr)
     cv2.imshow('input',frame)
     cv2.imshow('output',img)
     if cv2.waitKey(1) & 0xFF == ord('q'):
@@ -136,3 +147,8 @@ while(True):
 
 cap.release()
 cv2.destroyAllWindows()
+
+	
+			
+       
+ 
