@@ -19,7 +19,8 @@ vertices = [np.array([[0,240],[320,240],[160,0]],dtype=np.int32)]
 
 def getAngle(a, b, c):
     ang = math.degrees(math.atan2(c[1]-b[1], c[0]-b[0]) - math.atan2(a[1]-b[1], a[0]-b[0]))
-    return ang + 360 if ang < 0 else ang
+    print(ang)
+    return -(ang - 90) if ang < 0 else 90-ang
 
 def region_of_interest(img, vertices):
     mask = np.zeros_like(img)
@@ -113,7 +114,6 @@ while(True):
     img = cv2.line(img, (160,240), (direction_X,120), (255, 0, 0) , 3) 
 
     direction_angle = int(round(getAngle((direction_X, 120), (160, 240), (160,120))))
-    
     direction_final="S"
     direction_angle=str(direction_angle)
     if direction_X < 140:
